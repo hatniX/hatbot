@@ -1,0 +1,16 @@
+{
+    "!help":     "Commands: {cmdlist}",
+    "!backseat": "**No backseating please!** Unless I specifically ask for help. Just lean back and enjoy the stream. Thanks for your understanding. <3",
+    "!hydrate":  "[HYDRATE] {sender} reminds you to stay hydrated!",
+    "stretch":   "[STRETCH] {sender} reminds you to stretch!",
+    "!save":     "SAVE! **NOW!!!**",
+    "!hello":    "**{sender}** has just arrived! Hello @{sender}! How are you?",
+    "!bye":      "**{sender}** is about to leave! - Good bye, @{sender}! Thanks for stopping by!",
+    "!lurk":     "{sender} is lurking now. See you later!",
+    "!unlurk":   "Welcome back, {sender}!",
+    "!coffee":   "*serves {touser} a steaming-hot cup of coffee*",
+    "!ice":      "*gives {touser} a cold, sweet cone of ice cream*",
+    "!love":     "There is **{random}% love** between {sender} and {parameter} <3",
+    "!slap":     "*slaps {touser} with a trout >:)*",
+    "!bot":      "**hatbot {botver}** https://github.com/hatniX/hatbot"
+}
