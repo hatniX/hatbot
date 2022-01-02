@@ -16,7 +16,7 @@ from requests.structures import CaseInsensitiveDict
 from flask import Flask, request, Response
 
 # the version number of this bot
-bot_version = "0.0.2"
+bot_version = "0.0.3"
 
 # reading the config file
 with open("config.json") as json_config:
@@ -50,10 +50,9 @@ def respond():
         #     f.write("FOOBAR")
 
         isComm = request.json["eventData"]["body"].partition(' ')[0]
-        if (data_commands.get(isComm) != None):
+        if (data_commands.get(isComm.lower()) != None):
 
-            # make sure everything is latin-1 (still needs some fine-tuning?)
-            answer = str(bytes(data_commands[isComm], "utf-8"), "latin-1")
+            answer = data_commands[isComm.lower()]
 
             # extract the parameter (everything that was provided after the actual command)
             parameter = ""
@@ -61,6 +60,9 @@ def respond():
                 para = request.json["eventData"]["body"].split(" ", 1)
                 if (len(para) > 1):
                     parameter = para[1]
+                    # remove the @ at the beginning of a parameter (may have been used for autocomplete names)
+                    if (parameter[0] == "@"):
+                        parameter = parameter[1:]
 
             # replace variables in the command responses:
             #     {sender} -    the sender's user name
@@ -96,7 +98,7 @@ def respond():
 
             # building the response's body and sending it
             data = '{"body": "' + answer + '"}'
-            resp = requests.post(owncast_url, headers=headers, data=data)
+            resp = requests.post(owncast_url, headers=headers, data=data.encode('utf-8'))
             if resp.status_code != 200:
                 print("Bot post, error code: " + str(resp.status_code))
 
