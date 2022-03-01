@@ -13,14 +13,18 @@
 
 import os, random, json, requests
 from requests.structures import CaseInsensitiveDict
-from flask import Flask, request, Response
+from flask import Flask, request, Response, jsonify
 
 # the version number of this bot
-bot_version = "0.0.3"
+bot_version = "0.0.4"
 
 # reading the config file
 with open("config.json") as json_config:
     data_config = json.load(json_config)
+
+# reading the alias list
+with open("alias.json") as json_alias:
+    data_alias = json.load(json_alias)
 
 # reading the command list
 with open("commands.json") as json_commands:
@@ -42,14 +46,14 @@ def respond():
     # in case of a CHAT event... (no other events are handled at the moment)
     if request.json["type"] == "CHAT":
 
-        # TODO creating/saving a chatlog
-        # print(request.json["eventData"]["timestamp"] + "\t" + request.json["eventData"]["user"]["displayName"] + "\t" + request.json["eventData"]["body"]);
-        # filename = "/foo/bar/baz.txt"
-        # os.makedirs(os.path.dirname(filename), exist_ok=True)
-        # with open(filename, "w") as f:
-        #     f.write("FOOBAR")
+        print("\n" + request.json["eventData"]["timestamp"][0:10] + " " + request.json["eventData"]["timestamp"][11:19] + " - " + request.json["eventData"]["user"]["displayName"] + " - " + request.json["eventData"]["body"]);
 
         isComm = request.json["eventData"]["body"].partition(' ')[0]
+
+        # check for aliases
+        if (data_alias.get(isComm.lower()) != None):
+            isComm = data_alias[isComm.lower()]
+
         if (data_commands.get(isComm.lower()) != None):
 
             answer = data_commands[isComm.lower()]
@@ -70,6 +74,7 @@ def respond():
             #     {parameter} - a given parameter (required)
             #     {random} -    a random number between 1 and 100
             #     {cmdlist} -   the list of all available commands
+            #     {aliaslist} - the list of all available commands
             #     {botver} -    the version number of this bot
 
             answer = answer.replace("{sender}", request.json["eventData"]["user"]["displayName"])
@@ -94,12 +99,20 @@ def respond():
                     cmds = cmds + cmd +" "
                 answer = answer.replace("{cmdlist}", cmds)
 
+            if ("{aliaslist}" in answer):
+                cmds = ""
+                for cmd in data_alias.keys():
+                    cmds = cmds + cmd +" "
+                answer = answer.replace("{aliaslist}", cmds)
+
             answer = answer.replace("{botver}", bot_version)
 
             # building the response's body and sending it
             data = '{"body": "' + answer + '"}'
             resp = requests.post(owncast_url, headers=headers, data=data.encode('utf-8'))
             if resp.status_code != 200:
-                print("Bot post, error code: " + str(resp.status_code))
+                print("Can't respond, error code: " + str(resp.status_code))
+            else:
+                print("RESPONSE: " + answer)
 
     return Response(status=200)
