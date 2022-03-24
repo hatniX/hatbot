@@ -16,7 +16,7 @@ from requests.structures import CaseInsensitiveDict
 from flask import Flask, request, Response, jsonify
 
 # the version number of this bot
-bot_version = "0.0.4"
+bot_version = "0.0.5"
 
 # reading the config file
 with open("config.json") as json_config:
@@ -70,6 +70,7 @@ def respond():
 
             # replace variables in the command responses:
             #     {sender} -    the sender's user name
+            #     {tohost} -    a given parameter or the host's user name (as set in config.json)
             #     {touser} -    a given parameter or the sender's user name
             #     {parameter} - a given parameter (required)
             #     {random} -    a random number between 1 and 100
@@ -78,6 +79,12 @@ def respond():
             #     {botver} -    the version number of this bot
 
             answer = answer.replace("{sender}", request.json["eventData"]["user"]["displayName"])
+
+            if ("{tohost}" in answer):
+                if (parameter != ""):
+                    answer = answer.replace("{tohost}", parameter)
+                else:
+                    answer = answer.replace("{tohost}", data_config["host_name"])
 
             if ("{touser}" in answer):
                 if (parameter != ""):
