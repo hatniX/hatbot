@@ -1,4 +1,5 @@
 {
     "owncast_server": "http://localhost:8080",
-    "access_token": "abc123"
+    "access_token": "abc123",
+    "host_name": "streamer"
 }
