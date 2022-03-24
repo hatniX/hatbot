@@ -1,8 +1,8 @@
 {
     "!help":     "Commands: {cmdlist}",
     "!backseat": "**No backseating please!** Unless I specifically ask for help. Just lean back and enjoy the stream. Thanks for your understanding. <3",
-    "!hydrate":  "[HYDRATE] {sender} reminds you to stay hydrated!",
-    "!stretch":  "[STRETCH] {sender} reminds you to stretch!",
+    "!hydrate":  "[HYDRATE] {sender} reminds {tohost} to stay hydrated!",
+    "!stretch":  "[STRETCH] {sender} reminds {tohost} to stretch!",
     "!save":     "SAVE! **NOW!!!**",
     "!hello":    "**{sender}** has just arrived! Hello @{sender}! How are you?",
     "!bye":      "**{sender}** is about to leave! - Good bye, @{sender}! Thanks for stopping by!",
