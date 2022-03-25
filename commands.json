@@ -12,5 +12,8 @@
     "!ice":      "*gives {touser} a cold, sweet cone of ice cream*",
     "!love":     "There is **{random}% love** between {sender} and {parameter} <3",
     "!slap":     "*slaps {touser} with a trout >:)*",
+    "!roulette": "*pulls the trigger of the gun* ... ",
+    "!checkgun": "",
+    "!reloadgun": "Gun has now one live round!",
     "!bot":      "**hatbot {botver}** https://github.com/hatniX/hatbot"
 }
