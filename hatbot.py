@@ -16,7 +16,7 @@ from requests.structures import CaseInsensitiveDict
 from flask import Flask, request, Response, jsonify
 
 # the version number of this bot
-bot_version = "0.0.5"
+bot_version = "0.0.6"
 
 # reading the config file
 with open("config.json") as json_config:
@@ -30,6 +30,10 @@ with open("alias.json") as json_alias:
 with open("commands.json") as json_commands:
     data_commands = json.load(json_commands)
 
+# init gun roulette
+gunEmpty = False
+gunTries = 0
+
 # the url of  the Owncast API for bot posts
 owncast_url = data_config["owncast_server"] + "/api/integrations/chat/send"
 
@@ -42,6 +46,10 @@ app = Flask(__name__)
 @app.route('/webhook', methods=['POST'])
 
 def respond():
+
+    # use the global variables for the gun roulette
+    global gunEmpty
+    global gunTries
 
     # in case of a CHAT event... (no other events are handled at the moment)
     if request.json["type"] == "CHAT":
@@ -113,6 +121,31 @@ def respond():
                 answer = answer.replace("{aliaslist}", cmds)
 
             answer = answer.replace("{botver}", bot_version)
+
+            # BEGIN gun roulette aka. russian roulette
+
+            if (isComm == "!roulette"):
+                if gunEmpty:
+                    answer = "Gun is empty..you can reload with `!reloadgun`"
+                else:
+                    if (random.randint(1, 6 - gunTries) == 1):    # a random 1 means we found the bullet 
+                        answer += " **BANG!** ... " + request.json["eventData"]["user"]["displayName"] + " lies dead on the chat floor :("
+                        gunEmpty = True
+                    else:
+                        answer += " Click! ... " + request.json["eventData"]["user"]["displayName"] + " is a lucky survivor :)"
+                        gunTries += 1
+
+            if (isComm == "!checkgun"):
+                if gunEmpty:
+                    answer = "Gun is empty..you can reload it with `!reloadgun`"
+                else:
+                    answer = "Gun still has a live round and trigger has been pulled " + str(gunTries) + " times..do you feel lucky?"
+
+            if (isComm == "!reloadgun"):
+                gunEmpty = False
+                gunTries = 0
+
+            # END gun roulette aka. russian roulette
 
             # building the response's body and sending it
             data = '{"body": "' + answer + '"}'
