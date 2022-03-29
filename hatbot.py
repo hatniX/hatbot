@@ -16,7 +16,7 @@ from requests.structures import CaseInsensitiveDict
 from flask import Flask, request, Response, jsonify
 
 # the version number of this bot
-bot_version = "0.0.6"
+bot_version = "0.0.7"
 
 # reading the config file
 with open("config.json") as json_config:
@@ -29,6 +29,10 @@ with open("alias.json") as json_alias:
 # reading the command list
 with open("commands.json") as json_commands:
     data_commands = json.load(json_commands)
+
+# reading 8-ball's responses array
+with open("ball.json") as json_ball:
+    ball_responses = json.load(json_ball)
 
 # init gun roulette
 gunEmpty = False
@@ -121,6 +125,20 @@ def respond():
                 answer = answer.replace("{aliaslist}", cmds)
 
             answer = answer.replace("{botver}", bot_version)
+
+            # /me workaround
+            if (isComm == "/me"):
+                if (parameter != ""):
+                    answer = "**" + request.json["eventData"]["user"]["displayName"] + "** " + parameter
+                else:
+                    answer = "**" + request.json["eventData"]["user"]["displayName"] + "** gesticulates energetically"
+
+            # 8-ball routine
+            if (isComm == "!8ball"):
+                if (parameter != ""):
+                    answer += ball_responses[random.randint(0, len(ball_responses) - 1)]
+                else:
+                    answer += "Ask me a question that can be answered with yes or no. Try: **" + isComm + " WhatEverNeedsAnAnswer**"
 
             # BEGIN gun roulette aka. russian roulette
 
