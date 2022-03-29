@@ -1,5 +1,5 @@
 {
-    "!help":     "Commands: {cmdlist}",
+    "!help":     "**Commands:** {cmdlist}<br>**Aliases**: {aliaslist}",
     "!backseat": "**No backseating please!** Unless I specifically ask for help. Just lean back and enjoy the stream. Thanks for your understanding. <3",
     "!hydrate":  "[HYDRATE] {sender} reminds {tohost} to stay hydrated!",
     "!stretch":  "[STRETCH] {sender} reminds {tohost} to stretch!",
@@ -12,6 +12,8 @@
     "!ice":      "*gives {touser} a cold, sweet cone of ice cream*",
     "!love":     "There is **{random}% love** between {sender} and {parameter} <3",
     "!slap":     "*slaps {touser} with a trout >:)*",
+    "/me":       "",
+    "!8ball":    "**MAGIC 8-BALL says:** ",
     "!roulette": "*pulls the trigger of the gun* ... ",
     "!checkgun": "",
     "!reloadgun": "Gun has now one live round!",
