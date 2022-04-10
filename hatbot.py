@@ -16,7 +16,7 @@ from requests.structures import CaseInsensitiveDict
 from flask import Flask, request, Response, jsonify
 
 # the version number of this bot
-bot_version = "0.0.7"
+bot_version = "0.0.7.1"
 
 # reading the config file
 with open("config.json") as json_config:
@@ -60,19 +60,19 @@ def respond():
 
         print("\n" + request.json["eventData"]["timestamp"][0:10] + " " + request.json["eventData"]["timestamp"][11:19] + " - " + request.json["eventData"]["user"]["displayName"] + " - " + request.json["eventData"]["body"]);
 
-        isComm = request.json["eventData"]["body"].partition(' ')[0]
+        isComm = request.json["eventData"]["body"].partition(' ')[0].lower()
 
         # check for aliases
-        if (data_alias.get(isComm.lower()) != None):
-            isComm = data_alias[isComm.lower()]
+        if (data_alias.get(isComm) != None):
+            isComm = data_alias[isComm]
 
-        if (data_commands.get(isComm.lower()) != None):
+        if (data_commands.get(isComm) != None):
 
-            answer = data_commands[isComm.lower()]
+            answer = data_commands[isComm]
 
             # extract the parameter (everything that was provided after the actual command)
             parameter = ""
-            if (isComm != request.json["eventData"]["body"]):
+            if (isComm != request.json["eventData"]["body"].lower()):
                 para = request.json["eventData"]["body"].split(" ", 1)
                 if (len(para) > 1):
                     parameter = para[1]
